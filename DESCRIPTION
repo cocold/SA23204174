@@ -1,0 +1,17 @@
+Package: SA23204174
+Type: Package
+Title: Mypackage
+Version: 1.0
+Date: 2023-11-27
+Author: Wang kexin
+Maintainer: Wang kexin <wkx1220@mail.ustc.edu.cn>
+Description: Several R and Rcpp function are included in this package for illustration.
+License: GPL (>= 2)
+Imports: Rcpp, microbenchmark,stats,TSA,bootstrap,boot,DAAG,coda,gridExtra,stargazer,matrixcalc,MASS,mcmc,DIRECT,readxl 
+Suggests: knitr, rmarkdown
+LinkingTo: Rcpp
+RoxygenNote: 7.2.3
+Encoding: UTF-8
+VignetteBuilder: knitr
+URL: http://github.com/cocold/SA23204174
+BugReports: http://github.com/cocold/SA23204174/issues
