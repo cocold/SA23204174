@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Wang Kexin" />
+
+<meta name="date" content="2023-11-27" />
+
+<title>Myexample</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Myexample</h1>
+<h4 class="author">Wang Kexin</h4>
+<h4 class="date">2023-11-27</h4>
+
+
+
+<div id="example-1" class="section level2">
+<h2>Example 1</h2>
+<p>Consider a problem: the observed data come from M candidate linear
+models <span class="math display">\[
+y_i \mid\left(\rho_m, \beta_m, \sigma_m^2, m=1, \ldots, M\right) \sim
+\sum_{m=1}^M \rho_m \cdot N\left(x_i^{\prime} \beta_m,
+\sigma_m^2\right),
+\]</span> where <span class="math inline">\(\rho=(\rho_1,..,\rho_M)\)</span> is the proportion
+vector of the M sub-populations, with<span class="math inline">\(\rho_m\ge0\)</span>and<span class="math inline">\(\sum_{m=1}^M\rho_M=1\)</span>.<span class="math inline">\(\beta_m=(\beta_{m1},...,\beta_{mp})&#39;\)</span>is
+the coefficient vector for the linear regression in the mth
+sub-population.<span class="math inline">\(\sigma_m^2\)</span>is the
+corresponding variance of the Gaussian residual errors.</p>
+<p>we introduce a latent variable <span class="math inline">\(z_i\)</span> for each observation i, so that <span class="math inline">\(z_i = m\)</span> indicates that the ith
+observation comes from the mth sub-population. <span class="math display">\[z_i\sim Multinomial(\rho_1,...\rho_M),\ \ \
+y_i|z_i\sim N(x_i&#39;\beta_m,\sigma_m^2)\]</span> Then we use the gibbs
+sampling to update <span class="math inline">\(\rho\)</span>,z,and <span class="math inline">\(\beta\)</span> to gain the true model and see
+which model these data comes from.</p>
+<p>Using 3 candidate models and using the following code to generate the
+initial model.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(SA23204174)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:DAAG&#39;:
+## 
+##     hills</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code></pre></div>
+<pre><code>## Warning: package &#39;corrplot&#39; was built under R version 4.3.2</code></pre>
+<pre><code>## corrplot 0.92 loaded</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code></pre></div>
+<pre><code>## Warning: package &#39;gridExtra&#39; was built under R version 4.3.2</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">library</span>(stargazer)</span></code></pre></div>
+<pre><code>## 
+## Please cite as:</code></pre>
+<pre><code>##  Hlavac, Marek (2022). stargazer: Well-Formatted Regression and Summary Statistics Tables.</code></pre>
+<pre><code>##  R package version 5.2.3. https://CRAN.R-project.org/package=stargazer</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">library</span>(MCMCpack)</span></code></pre></div>
+<pre><code>## Warning: package &#39;MCMCpack&#39; was built under R version 4.3.2</code></pre>
+<pre><code>## ##
+## ## Markov Chain Monte Carlo Package (MCMCpack)</code></pre>
+<pre><code>## ## Copyright (C) 2003-2023 Andrew D. Martin, Kevin M. Quinn, and Jong Hee Park</code></pre>
+<pre><code>## ##
+## ## Support provided by the U.S. National Science Foundation</code></pre>
+<pre><code>## ## (Grants SES-0350646 and SES-0350613)
+## ##</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">library</span>(matrixcalc)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;matrixcalc&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:MCMCpack&#39;:
+## 
+##     vech</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>n_obs <span class="ot">=</span> <span class="dv">200</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>n_coeff <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>rho1 <span class="ot">=</span> <span class="fl">0.2</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>rho2 <span class="ot">=</span> <span class="fl">0.3</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>rho3 <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>true_proportions <span class="ot">=</span> <span class="fu">c</span>(rho1, rho2, rho3)<span class="sc">*</span>n_obs</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>intercept_beta <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>beta1 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>)</span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a>beta2 <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">2</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a>beta3 <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">3</span>,<span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a><span class="co"># build covariance matrix</span></span>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a>covariance_matrix <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fl">0.5</span>, <span class="at">nrow =</span> <span class="fu">length</span>(beta1), <span class="at">ncol =</span> (<span class="fu">length</span>(beta1)))</span>
+<span id="cb22-17"><a href="#cb22-17" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(beta1))</span>
+<span id="cb22-18"><a href="#cb22-18" tabindex="-1"></a>{</span>
+<span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(beta1))</span>
+<span id="cb22-20"><a href="#cb22-20" tabindex="-1"></a>  {</span>
+<span id="cb22-21"><a href="#cb22-21" tabindex="-1"></a>    covariance_matrix[i,j] <span class="ot">=</span> covariance_matrix[i,j]<span class="sc">^</span><span class="fu">abs</span>(i <span class="sc">-</span> j)</span>
+<span id="cb22-22"><a href="#cb22-22" tabindex="-1"></a>  }</span>
+<span id="cb22-23"><a href="#cb22-23" tabindex="-1"></a>}</span>
+<span id="cb22-24"><a href="#cb22-24" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" tabindex="-1"></a>dataset <span class="ot">=</span> <span class="fu">data.matrix</span>(<span class="fu">data.frame</span>(<span class="fu">mvrnorm</span>(<span class="at">n =</span> n_obs,<span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">length</span>(beta1)),<span class="at">Sigma =</span> covariance_matrix)))</span>
+<span id="cb22-26"><a href="#cb22-26" tabindex="-1"></a>dataset <span class="ot">=</span> <span class="fu">cbind</span>(<span class="dv">1</span>, dataset)</span>
+<span id="cb22-27"><a href="#cb22-27" tabindex="-1"></a><span class="fu">colnames</span>(dataset)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">&#39;intercept&#39;</span></span>
+<span id="cb22-28"><a href="#cb22-28" tabindex="-1"></a></span>
+<span id="cb22-29"><a href="#cb22-29" tabindex="-1"></a>beta1 <span class="ot">=</span> <span class="fu">c</span>(intercept_beta,beta1)</span>
+<span id="cb22-30"><a href="#cb22-30" tabindex="-1"></a>beta2 <span class="ot">=</span> <span class="fu">c</span>(intercept_beta,beta2)</span>
+<span id="cb22-31"><a href="#cb22-31" tabindex="-1"></a>beta3 <span class="ot">=</span> <span class="fu">c</span>(intercept_beta,beta3)</span>
+<span id="cb22-32"><a href="#cb22-32" tabindex="-1"></a></span>
+<span id="cb22-33"><a href="#cb22-33" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb22-34"><a href="#cb22-34" tabindex="-1"></a><span class="co"># beta1</span></span>
+<span id="cb22-35"><a href="#cb22-35" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>true_proportions[<span class="dv">1</span>])</span>
+<span id="cb22-36"><a href="#cb22-36" tabindex="-1"></a>{</span>
+<span id="cb22-37"><a href="#cb22-37" tabindex="-1"></a>  new_y <span class="ot">=</span> dataset[i,]<span class="sc">%*%</span>beta1</span>
+<span id="cb22-38"><a href="#cb22-38" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">c</span>(y, new_y)</span>
+<span id="cb22-39"><a href="#cb22-39" tabindex="-1"></a>}</span>
+<span id="cb22-40"><a href="#cb22-40" tabindex="-1"></a></span>
+<span id="cb22-41"><a href="#cb22-41" tabindex="-1"></a><span class="co"># beta2</span></span>
+<span id="cb22-42"><a href="#cb22-42" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> (true_proportions[<span class="dv">1</span>]<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span> (true_proportions[<span class="dv">1</span>]<span class="sc">+</span>true_proportions[<span class="dv">2</span>]))</span>
+<span id="cb22-43"><a href="#cb22-43" tabindex="-1"></a>{</span>
+<span id="cb22-44"><a href="#cb22-44" tabindex="-1"></a>  new_y <span class="ot">=</span> dataset[i,]<span class="sc">%*%</span>beta2</span>
+<span id="cb22-45"><a href="#cb22-45" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">c</span>(y, new_y)</span>
+<span id="cb22-46"><a href="#cb22-46" tabindex="-1"></a>}</span>
+<span id="cb22-47"><a href="#cb22-47" tabindex="-1"></a></span>
+<span id="cb22-48"><a href="#cb22-48" tabindex="-1"></a><span class="co"># beta3</span></span>
+<span id="cb22-49"><a href="#cb22-49" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> (<span class="dv">1</span> <span class="sc">+</span> true_proportions[<span class="dv">1</span>]<span class="sc">+</span>true_proportions[<span class="dv">2</span>])<span class="sc">:</span>n_obs)</span>
+<span id="cb22-50"><a href="#cb22-50" tabindex="-1"></a>{</span>
+<span id="cb22-51"><a href="#cb22-51" tabindex="-1"></a>  new_y <span class="ot">=</span> dataset[i,]<span class="sc">%*%</span>beta3</span>
+<span id="cb22-52"><a href="#cb22-52" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">c</span>(y, new_y)</span>
+<span id="cb22-53"><a href="#cb22-53" tabindex="-1"></a>}</span>
+<span id="cb22-54"><a href="#cb22-54" tabindex="-1"></a></span>
+<span id="cb22-55"><a href="#cb22-55" tabindex="-1"></a><span class="co"># add error</span></span>
+<span id="cb22-56"><a href="#cb22-56" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(y))</span>
+<span id="cb22-57"><a href="#cb22-57" tabindex="-1"></a>{</span>
+<span id="cb22-58"><a href="#cb22-58" tabindex="-1"></a>  y[i] <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> y[i]</span>
+<span id="cb22-59"><a href="#cb22-59" tabindex="-1"></a>}</span>
+<span id="cb22-60"><a href="#cb22-60" tabindex="-1"></a></span>
+<span id="cb22-61"><a href="#cb22-61" tabindex="-1"></a>TIMES <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb22-62"><a href="#cb22-62" tabindex="-1"></a></span>
+<span id="cb22-63"><a href="#cb22-63" tabindex="-1"></a>M <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb22-64"><a href="#cb22-64" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">as.matrix</span>(dataset)</span>
+<span id="cb22-65"><a href="#cb22-65" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">as.matrix</span>(X[,<span class="fu">order</span>(<span class="fu">colnames</span>(X))])</span></code></pre></div>
+<p>Then let’s initialize every parameter.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>initialized <span class="ot">=</span> <span class="fu">init</span>(X, y, M)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>theta_array<span class="ot">=</span> initialized<span class="sc">$</span>theta</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#beta_test1 = as.matrix(beta1)</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co">#row.names(beta_test1) = row.names(theta_array$beta[[1]])</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="co">#beta_test2 = as.matrix(beta2)</span></span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="co">#row.names(beta_test2) = row.names(theta_array$beta[[2]])</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a><span class="co">#theta_array$beta[[1]] =  beta_test1</span></span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a><span class="co">#theta_array$beta[[2]] = beta_test2</span></span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>z_array <span class="ot">=</span> initialized<span class="sc">$</span>matrix_z</span>
+<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a>history_theta <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a>history_z  <span class="ot">=</span> <span class="fu">list</span>()</span></code></pre></div>
+<p>Using the gibbs sampling to update every parameter.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>TIMES)</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>{</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  new_z <span class="ot">=</span> <span class="fu">UpdateArrayZ</span>(theta_array,y,X,M)</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  history_z[[i]] <span class="ot">=</span> new_z</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>  z_array<span class="ot">=</span>new_z</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>  <span class="co">#print(&#39;rho&#39;)</span></span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>  theta_array <span class="ot">=</span> <span class="fu">UpdateRho</span>(theta_array,z_array,M)</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  <span class="co">#print(&#39;subpop&#39;)</span></span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>  covariates <span class="ot">=</span> <span class="fu">UpdateSubPop</span>(theta_array,z_array, X,M)</span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>  <span class="co">#print(&#39;W_m inv&#39;)</span></span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>  theta_array <span class="ot">=</span> <span class="fu">UpdateW_inv</span>(theta_array, covariates, M)</span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>  <span class="co">#print(&#39;sigma&#39;)</span></span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a>  <span class="co">#print(theta_array$sigma)</span></span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>  theta_array <span class="ot">=</span> <span class="fu">UpdateSigma</span>(theta_array, z_array,covariates,M,y)</span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a>  <span class="co">#print(&#39;beta&#39;)</span></span>
+<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a>  theta_array <span class="ot">=</span> <span class="fu">UpdateBeta</span>(z_array,covariates,theta_array,M,y)</span>
+<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a>  <span class="co">#print(theta_array$sigma)</span></span>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a>  <span class="co">#print(&#39;r&#39;)</span></span>
+<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a>  <span class="co">#theta_array = UpdateR(theta_array, z_array, X,y)</span></span>
+<span id="cb24-20"><a href="#cb24-20" tabindex="-1"></a>  <span class="co">#print(theta_array$r)</span></span>
+<span id="cb24-21"><a href="#cb24-21" tabindex="-1"></a>  history_theta[[i]] <span class="ot">=</span> theta_array</span>
+<span id="cb24-22"><a href="#cb24-22" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>n_covariates <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>summary_parameters <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol =</span> n_covariates<span class="sc">+</span><span class="dv">1</span>, <span class="at">nrow =</span> M))</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="fu">colnames</span>(summary_parameters) <span class="ot">=</span> <span class="fu">row.names</span>(theta_array<span class="sc">$</span>old_beta[[<span class="dv">1</span>]])</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>beta_estimates <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="cf">for</span>(idx_m <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>M){</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>  <span class="cf">for</span>(theta <span class="cf">in</span> history_theta){</span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>    beta_estimates[[<span class="fu">toString</span>(idx_m)]] <span class="ot">=</span> <span class="fu">rbind</span>(beta_estimates[[<span class="fu">toString</span>(idx_m)]], theta<span class="sc">$</span>beta[[idx_m]])</span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>  }</span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>}</span></code></pre></div>
+<p>Plot the estimated data to compare the result.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="cf">for</span>(idx_m <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(beta_estimates))</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>{</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&#39;Subpopulation n:&#39;</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>  <span class="fu">print</span>(idx_m)</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>  list_covariates <span class="ot">=</span> <span class="fu">sort</span>(<span class="fu">unique</span>(<span class="fu">row.names</span>(beta_estimates[[idx_m]])))</span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>  <span class="cf">for</span>(one_cov <span class="cf">in</span> list_covariates)</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>  {</span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>    values <span class="ot">=</span> beta_estimates[[idx_m]][<span class="fu">which</span>(<span class="fu">row.names</span>(beta_estimates[[idx_m]])<span class="sc">==</span>one_cov),]</span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a>    one_median <span class="ot">=</span> <span class="fu">median</span>(values)</span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a>    summary_parameters[idx_m,one_cov] <span class="ot">=</span> one_median</span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a>    <span class="fu">plot</span>(values,<span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">main =</span> one_cov)</span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a>  }</span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;Subpopulation n:&quot;
+## [1] 1</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<pre><code>## [1] &quot;Subpopulation n:&quot;
+## [1] 2</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<pre><code>## [1] &quot;Subpopulation n:&quot;
+## [1] 3</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>We can see that the estimated coefficients of each model is close to
+the true value.</p>
+</div>
+<div id="example-2" class="section level2">
+<h2>Example 2</h2>
+<p>Using the EM algorithm to solve the moth gene problem. If we know the
+number of different color of the moth,that Nc,Ni,Nt, but we just want to
+the propotion of the three gene<span class="math inline">\(p_c,p_i,p_t\)</span>, we can use the EM algorithm
+to compute the true propotion <span class="math inline">\(p_c,p_i,p_t\)</span>.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">library</span>(SA23204174)</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>p<span class="ot">=</span><span class="fu">MyEM</span>(<span class="dv">156</span>,<span class="dv">185</span>,<span class="dv">95</span>)</span></code></pre></div>
+<p>That’s to say, the three propotion is <span class="math inline">\(p_c=0.1879971,\ \ p_i=0.3033539,\ \
+p_t=0.508649\)</span>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
