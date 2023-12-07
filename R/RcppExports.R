@@ -2,10 +2,18 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @title EM algorithm for the Genetic problem
-#' @name EM 
-NULL
-
-EM <- function(nc, ni, nt) {
-    .Call('_SA23204174_EM', PACKAGE = 'SA23204174', nc, ni, nt)
+#' @name MyEM 
+#' @description EM algorithm for the Genetic problem
+#' @param nc the initial number of c type
+#' @param ni the initial value of i type
+#' @param nt the initial of t type 
+#' @return the estimated probability
+#' @examples
+#' \dontrun{
+#' p=MyEM(85,96,25)
+#' }
+#' @export
+MyEM <- function(nc, ni, nt) {
+    .Call('_SA23204174_MyEM', PACKAGE = 'SA23204174', nc, ni, nt)
 }
 

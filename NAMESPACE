@@ -2,6 +2,7 @@
 
 export(ComputeProb)
 export(GetPosteriorZ)
+export(MyEM)
 export(UpdateArrayZ)
 export(UpdateBeta)
 export(UpdateBetaHat)

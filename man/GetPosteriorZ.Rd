@@ -4,12 +4,12 @@
 \alias{GetPosteriorZ}
 \title{Update Z:only one scalar at a time}
 \usage{
-GetPosteriorZ(y, X, theta_array, M)
+GetPosteriorZ(ym, Xm, theta_array, M)
 }
 \arguments{
-\item{y}{the dependent variables}
+\item{ym}{the dependent variables}
 
-\item{X}{the independent variables}
+\item{Xm}{the independent variables}
 
 \item{theta_array}{the defined theta above}
 

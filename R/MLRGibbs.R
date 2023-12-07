@@ -172,14 +172,14 @@ init= function(X, y, M)
   vector_rho_0 = init_rho(M)
   matrix_r_0 = init_r(X,M)
   matrix_z_0 = init_z(X,vector_rho_0)
-  theta = init_theta(M,matrix_z_0,matrix_r_0,vector_rho_0,X)
+  theta = init_theta(M,matrix_z_0,matrix_r_0,vector_rho_0,X,y)
   return(list('theta' = theta, 'matrix_z' = matrix_z_0))
 }
 
 #' @title Update Z:only one scalar at a time
 #' @description Update Z:only one scalar at a time
-#' @param X the independent variables
-#' @param y the dependent variables
+#' @param Xm the independent variables
+#' @param ym the dependent variables
 #' @param M the number of subpopulation
 #' @param theta_array the defined theta above
 #' @return an scalar of z
@@ -194,22 +194,27 @@ init= function(X, y, M)
 #' @import DIRECT
 #' @import mcmc
 #' @export
-GetPosteriorZ = function(y,X,theta_array, M)
+GetPosteriorZ = function(ym,Xm, theta_array, M)
 {
   num = c()
   for(idx_m in 1:M)
   {
     selected_beta = theta_array[['beta']][[idx_m]]
     label_beta = rownames(selected_beta)
-    one_x = X[label_beta]
+    one_x = Xm[label_beta]
     mu_normal = one_x%*%selected_beta
     sigma_m = theta_array[['sigma']][[idx_m]]
-    f_norm = dnorm(y, mean =  mu_normal, sd = sqrt(sigma_m))
+    f_norm = dnorm(ym, mean =  mu_normal, sd = sqrt(sigma_m))
     rho_m = theta_array[['rho']][[idx_m]]
     prod_f_rho = rho_m*f_norm
     num = c(num, prod_f_rho)
   }
-  prob_z = num/sum(num)
+  if (sum(num)==0)
+  {
+    prob_z=rep(1/M,M)
+  }
+  else
+    prob_z = num/sum(num)
   return(sample(x = 1:M, size=1, prob = prob_z))
 }
 
@@ -399,7 +404,7 @@ UpdateSigma = function(theta_array,matrix_z,covariates,M,y)
   #update a 
   vector_a = vector_n_proportion + vector_q + 0.001
   # update beta-hat
-  theta_array[['beta_hat']] = UpdateBetaHat(theta_array, matrix_z, covariates)
+  theta_array[['beta_hat']] = UpdateBetaHat(theta_array, matrix_z, covariates,y)
   # update_b
   vector_b = c()
   for(idx_m in 1:length(theta_array$beta))
@@ -603,6 +608,7 @@ ComputeProb = function(theta_array,matrix_z, idx_m,single_label,X,y)
 #' @param matrix_z the z matrix
 #' @param theta_array the defined theta above
 #' @param X the independent variable
+#' @param y the dependent variable
 #' @return updated theta_array
 #' @examples
 #' \dontrun{
@@ -616,7 +622,7 @@ ComputeProb = function(theta_array,matrix_z, idx_m,single_label,X,y)
 #' @import DIRECT
 #' @import mcmc
 #' @export
-UpdateR = function(theta_array, matrix_z,X){
+UpdateR = function(theta_array, matrix_z,X,y){
   # initialize r
   old_r_array = theta_array$r
   new_r_array = theta_array$r
@@ -629,7 +635,7 @@ UpdateR = function(theta_array, matrix_z,X){
     {
       if(single_label!='intercept')
       {
-        likelihood = ComputeProb(theta_array,matrix_z, idx_m,single_label,X)
+        likelihood = ComputeProb(theta_array,matrix_z, idx_m,single_label,X,y)
         one_prob = 1/(1 + exp(likelihood[1] - likelihood[2]))
         probability = c(1- one_prob, one_prob)
         one_r = sample(x = 0:1, size = 1, prob = probability)

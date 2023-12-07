@@ -4,7 +4,7 @@
 \alias{UpdateR}
 \title{update r}
 \usage{
-UpdateR(theta_array, matrix_z, X)
+UpdateR(theta_array, matrix_z, X, y)
 }
 \arguments{
 \item{theta_array}{the defined theta above}
@@ -12,6 +12,8 @@ UpdateR(theta_array, matrix_z, X)
 \item{matrix_z}{the z matrix}
 
 \item{X}{the independent variable}
+
+\item{y}{the dependent variable}
 }
 \value{
 updated theta_array
