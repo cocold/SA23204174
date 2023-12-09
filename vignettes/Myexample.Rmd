@@ -98,7 +98,24 @@ X = as.matrix(dataset)
 X = as.matrix(X[,order(colnames(X))])
 ```
 
-Then let's initialize every parameter.
+Then let's the init function to initialize every parameter. we define the vector $\rho_0$ of the mixture proportions:  it's built sampling the values from a conjugate Dirichlet prior distribution:
+$$\rho \sim Dirichlet(\alpha_1,..., \alpha_M)$$
+In each mixture component of the regression model, the prior distributions of the indicator variables $r_{mj}$ are assumed to be independent $Bernoulli(d_{mj})$  for $j = 1 , . . . , p$. So, looking at the joint distribution of $r_m$:
+$$\pi(r_m) = \prod_{j=1}^p d_{mj} (1- d_{mj})^{1-r_{mj}}$$
+We can sample the initial value of each $r_{mj}$ from a non-informative $Bernoulli(0.5)$.Each $z_i$ is generated from a multinomial distribution, i.e. $z_i \sim Multinomial(\rho_1,.., \rho_M)$.The prior of each $\beta_m(r_m)$ is assumed to be the following g-prior:
+$$\beta_m(r_m) \sim N \bigg ( \hat \beta_m ^{\lambda_m} (r_m), g_m \sigma_m^2 [X_m'(r_m)X_m(r_m)]^{-1} \bigg )$$
+where:
+
+- $\hat \beta_m ^{\lambda_m} (r_m) = w_m(r_m) X_m'(r_m) Y_m$
+
+- $g_m$ is a positive arbitrary number to fix. It's usually equal to $n_m$, which is the size of the sub-population m. 
+
+- $w_m(r_m) = [X_m'(r_m) X_m(r_m) + \lambda_m I]^{-1}$
+
+- $\lambda_m$ is the ridge parameter: it's used when we cannot derive the inverse of $X_m'(r_m) X_m(r_m)$. With $\lambda_m = 0$ we have $w_m(r_m) = [X_m'(r_m) X_m(r_m)]^{-1}$
+
+- $\sigma_m^2 \sim IG \big ( \frac{a_{m_0}}{2}, \frac{b_{m_0}}{2} \big )$. We could assign to $a_{m_0}$ and $b_{m_0}$ some non-informative values (i.e. both equals to 0.01) or we could even fix it equals to 1, in order to avoid uncontrolled values sampled of $\sigma_m$.
+
 
 ```{r}
 initialized = init(X, y, M)
@@ -120,6 +137,44 @@ history_z  = list()
 ```
 
 Using the gibbs sampling to update every parameter.
+
+First, update latent variable Z**. We update the values of the latent variable z which determines the structure of each group. To do this, for each observation we sample the z value form the following conditional distribution:
+
+$$P(z_i =  m |\theta, y) = \frac{\rho_m f(y_i|\theta_m)}{\sum_{m=1}^M \rho_m f(y_i|\theta_m)}$$ 
+In other words, for each sub-population we compute the probability to assign a specific observation to it, then we sample the value of z from each distribution. The density function at the numerator corresponds to the normal density related to y, where:
+
+$$[y_i| \theta_m] \sim N \bigg (x_i(r_m) \beta_m(r_m), \sigma_m^2 \bigg )$$
+Where $\theta_m = (\beta_m, \sigma_m^2, \rho_m, r_m)$.
+
+Then we update $\rho$.The conditional distribution of $\rho$, given z, is the following:
+
+$$\rho \sim Dirichlet (n_1 + \alpha_1,..., n_M + \alpha_M)$$
+Where $n_1, n_2,..., n_M$ are the cardinality of each sub-population.
+
+Third, we update sub-populations.At each iteration we update the sub-populations, looking at the two latent variables z and r.
+
+Then we update $w_m(r_m)$. As for the previous step, we need to update the matricies involved in our algorithm: in this case, we update the $p \times p$ matrix $w_m(r_m)$. At each iteration we check whether the updated matrix  $X_m'(r_m) X_m(r_m)$ is singular or not: in the first case, the ridge parameter $\lambda_m$ is added to the computed matrix otherwise not. This parameter is equal to $1/p$, where p is the number of covariates used in the specific sub-population. Adding $\lambda_m$ we have $w_m(r_m) = \big (X_m'(r_m) X_m(r_m) + \lambda_mI \big )^{-1}$
+
+Then we update $\sigma_m$ and $\hat \beta_m(r_m)$.** In order to sample $\sigma_m^2$ we need first to update the parameter $\hat \beta_m^{\lambda_m}(r_m)$, where:
+$$\hat \beta_m^{\lambda_m} (r_m) = w_m(r_m) X_m'(r_m)Y_m$$
+So now, we need to sample the variance of each subpopulation, updating first the parameters of the full conditional, which is an inverse gamma:
+$$\sigma_m^2 \sim IG \bigg (\frac{a_m}{2}, \frac{b_m}{2} \bigg )$$
+We have:
+
+- $a_m = n_m + q_m + a_{m_0}$, where $q_m = \sum_i^p r_{mj}$, i.e. the number of active covariates in the sub-population
+
+- $b_m = \big [ Y_m - X_m(r_m) \beta_m(r_m) \big ]'\big [ Y_m - X_m(r_m) \beta_m(r_m) \big ] + \frac{\big [ \beta_m(r_m) - \beta_m^{\lambda_m}(r_m) \big ]' w_m^{-1}(r_m) \big [ \beta_m(r_m) - \beta_m^{\lambda_m}(r_m) \big ]}{ n_m} + b_{m_0}$
+
+In this case, the sampled parameters depends on $z, r_m, \beta_m$
+
+Finally, we update $\beta$.The conditional distribution of $\beta_m$ is given by a multivariate normal distribution (MVN). Indeed, we have:
+$$\beta_m(r_m) \sim MVN \bigg (\mu_m, \Omega_m \bigg )$$
+Where:
+
+- $\mu_m = \Omega_m  \big ( \frac{ n_m X_m (r_m) Y_m' + w_m^(-1)(r_m) \hat \beta_m^{\lambda_m} (r_m)}{n_m \sigma_m^2}  \big )$ ($p \times 1$ vector) 
+
+- $\Omega_m^{-1} = \big [ \frac{n_m X'_m (r_m) X_m (r_m) + w_m^{-1} (r_m)}{n_m \sigma_m^2}  \big ]$ ($p \times p$ matrix)
+
 
 ```{r}
 for(i in 1:TIMES)
@@ -189,4 +244,4 @@ library(SA23204174)
 p=MyEM(156,185,95)
 ```
 
-That's to say, the three propotion is $p_c=0.1879971,\ \ p_i=0.3033539,\ \ p_t=0.508649$.
+That's to say, the three proportion is $p_c=0.1879971,\ \ p_i=0.3033539,\ \ p_t=0.508649$.
